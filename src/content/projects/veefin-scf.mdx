@@ -1,0 +1,60 @@
+---
+title: "Veefin SCF platform"
+summary: "Backend of a supply chain finance platform used by Indian banks. Disbursement, ledger, automation."
+role: "Backend engineer"
+year: "2023 – today"
+categories: ["banking"]
+tags: ["PHP 8", "Laravel", "Oracle", "RabbitMQ", "Redis"]
+impact: "3 banks live · 160+ prod issues closed"
+featured: true
+order: 2
+heroEyebrow: "Banking · Platform · 2023 – today"
+heroSub: "Building the backend of Veefin's supply chain finance product — invoice financing, disbursement, and automated ledger operations for Indian banks."
+team: "Backend squad of 6"
+timeline: "Ongoing"
+stack: "PHP 8, Laravel, Symfony, Oracle, RabbitMQ, Redis"
+video:
+  src: "https://www.youtube.com/embed/dQw4w9WgXcQ"
+  pattern: "poster-pattern-2"
+  caption: "Screen tour of the disbursement workflow and the SBI / IDFC integration surface."
+  playLabel: "Play 3-min product tour"
+related:
+  - "payments"
+  - "yes-bank-migration"
+---
+
+## 01 · The problem
+
+Three banks, one product. Each has its own batch format, IFSC quirks, settlement windows and compliance rules. The platform has to look like a single calm SaaS on top of that chaos.
+
+## 02 · What I own
+
+- Payment and disbursement workflows across SBI, IDFC and Yes Bank rails.
+- IDFC batch-ID generation with idempotent retries and audit trail.
+- Automated financial operations: interest accrual, fee posting, repayment cycles.
+- IFSC validation pipeline that catches bad data before it costs anyone money.
+- Production triage — 160+ issues closed, most of them late on Thursday nights.
+
+## 03 · Architecture, in plain English
+
+- **Bank adapters.** Each bank has its own module. They all implement one interface.
+- **A queue for everything.** RabbitMQ workers handle disbursements, so a bank outage doesn't bring down the UI.
+- **Event-sourced ledger.** Every rupee has a story you can replay.
+- **Redis, used carefully.** Sessions and a thin read-through cache. No caching of balances.
+
+```php
+interface BankAdapter {
+  public function disburse(Disbursement $d): BankReceipt;
+  public function reconcile(string $batchId): ReconResult;
+  public function validateIfsc(string $ifsc): bool;
+}
+```
+
+## 04 · The outcome
+
+<div class="metric-row not-prose">
+  <div class="metric"><strong>3</strong><span>banks live</span></div>
+  <div class="metric"><strong>160+</strong><span>prod issues closed</span></div>
+  <div class="metric"><strong>80%+</strong><span>ops steps automated</span></div>
+  <div class="metric"><strong>0</strong><span>batch-ID duplicates</span></div>
+</div>

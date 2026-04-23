@@ -1,0 +1,32 @@
+{
+    "title": "Mahabub Elahi",
+    "tagline": "Backend engineer writing stories in code.",
+    "brand": {
+        "mark": "M/",
+        "text": "Mahabub Elahi"
+    },
+    "navLinks": [
+        { "label": "Story", "href": "/", "cta": false },
+        { "label": "Projects", "href": "/projects/", "cta": false },
+        { "label": "Writing", "href": "/blog/", "cta": false },
+        { "label": "Videos", "href": "/#reel", "cta": false },
+        { "label": "About", "href": "/about/", "cta": false },
+        { "label": "Let's talk", "href": "/#contact", "cta": true }
+    ],
+    "footer": {
+        "left": "Built in Dhaka. Written by hand.",
+        "right": "© 2026 Mahabub Elahi"
+    },
+    "seo": {
+        "description": "A backend engineer who moves money safely. Projects, writing and videos from six years of banking systems, fintech platforms and cloud infrastructure.",
+        "ogImage": "/images/og-default.png"
+    },
+    "contact": {
+        "emailUserB64": "c2hvamlibWFoYWJ1YjYzMA==",
+        "emailDomainB64": "Z21haWwuY29t",
+        "linkedin": "https://www.linkedin.com/in/mahabubelahi",
+        "github": "https://github.com/shojibMahabub",
+        "location": "Dhaka, Bangladesh",
+        "phoneNote": "Phone shared on request, over the channels above."
+    }
+}

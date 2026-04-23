@@ -1,0 +1,384 @@
+# Decap CMS configuration
+# Every visible piece of content on the site is editable here.
+# Each publish goes through the editorial workflow -> a pull request
+# on GitHub -> Netlify redeploy. That PR history IS the version log.
+
+backend:
+    name: git-gateway
+    branch: main
+    commit_messages:
+        create: 'content(cms): create {{collection}} "{{slug}}"'
+        update: 'content(cms): update {{collection}} "{{slug}}"'
+        delete: 'content(cms): delete {{collection}} "{{slug}}"'
+        uploadMedia: 'content(cms): upload {{path}}'
+        deleteMedia: 'content(cms): delete {{path}}'
+
+# Every save goes through review -> PR -> merge
+publish_mode: editorial_workflow
+
+media_folder: public/images/uploads
+public_folder: /images/uploads
+
+site_url: https://mahabub.netlify.app
+display_url: https://mahabub.netlify.app
+logo_url: /favicon.svg
+
+# A local server can be run with `npx decap-server` for testing without
+# deploying. Uncomment the next line and set `local_backend: true` to use it.
+# local_backend: true
+
+collections:
+    # -----------------------------------------------------------------
+    # Site settings (singleton)
+    # -----------------------------------------------------------------
+    - name: site
+      label: Site settings
+      editor:
+          preview: false
+      files:
+          - file: src/content/site/site.json
+            label: Global
+            name: site
+            fields:
+                - { label: Site title, name: title, widget: string }
+                - { label: Tagline, name: tagline, widget: string }
+                - label: Brand
+                  name: brand
+                  widget: object
+                  fields:
+                      - { label: Mark (small badge text), name: mark, widget: string }
+                      - { label: Name, name: text, widget: string }
+                - label: Nav links
+                  name: navLinks
+                  widget: list
+                  fields:
+                      - { label: Label, name: label, widget: string }
+                      - { label: URL, name: href, widget: string }
+                      - { label: Primary CTA?, name: cta, widget: boolean, default: false }
+                - label: Footer
+                  name: footer
+                  widget: object
+                  fields:
+                      - { label: Left text, name: left, widget: string }
+                      - { label: Right text, name: right, widget: string }
+                - label: SEO defaults
+                  name: seo
+                  widget: object
+                  fields:
+                      - { label: Default description, name: description, widget: text, required: false }
+                      - { label: Default OG image, name: ogImage, widget: string, required: false }
+                - label: Contact
+                  name: contact
+                  widget: object
+                  fields:
+                      - { label: Email local-part (base64), name: emailUserB64, widget: string, hint: "base64 of the part before @" }
+                      - { label: Email domain (base64), name: emailDomainB64, widget: string, hint: "base64 of the domain" }
+                      - { label: LinkedIn URL, name: linkedin, widget: string }
+                      - { label: GitHub URL, name: github, widget: string }
+                      - { label: Location, name: location, widget: string }
+                      - { label: Phone note, name: phoneNote, widget: string }
+
+    # -----------------------------------------------------------------
+    # Home page (singleton)
+    # -----------------------------------------------------------------
+    - name: home
+      label: Home page
+      files:
+          - file: src/content/home/home.json
+            label: Home page
+            name: home
+            fields:
+                - label: Hero (chapter 00)
+                  name: hero
+                  widget: object
+                  fields:
+                      - { label: Eyebrow, name: eyebrow, widget: string }
+                      - { label: Title HTML, name: titleHtml, widget: text, hint: "Allowed: <br>, <span class=\"accent\">" }
+                      - { label: Subtitle, name: sub, widget: text }
+                      - label: CTAs
+                        name: ctas
+                        widget: list
+                        max: 3
+                        fields:
+                            - { label: Label, name: label, widget: string }
+                            - { label: URL, name: href, widget: string }
+                            - { label: Style, name: style, widget: select, options: [primary, ghost], default: primary }
+                      - label: Stats
+                        name: stats
+                        widget: list
+                        max: 6
+                        fields:
+                            - { label: Value, name: value, widget: string }
+                            - { label: Label, name: label, widget: string }
+                      - { label: Scroll label, name: scrollLabel, widget: string, default: scroll }
+
+                - label: Chapter 01 – Origin
+                  name: origin
+                  widget: object
+                  fields:
+                      - { label: Chapter number, name: chapterNum, widget: string, default: "01" }
+                      - { label: Title, name: title, widget: string }
+                      - { label: Paragraphs, name: body, widget: list, field: { label: Paragraph, name: paragraph, widget: text } }
+
+                - label: Chapter 02 – Journey
+                  name: journey
+                  widget: object
+                  fields:
+                      - { label: Chapter number, name: chapterNum, widget: string, default: "02" }
+                      - { label: Title, name: title, widget: string }
+                      - label: Timeline items
+                        name: items
+                        widget: list
+                        fields:
+                            - { label: Year, name: year, widget: string }
+                            - { label: Title, name: title, widget: string }
+                            - { label: Description, name: description, widget: text }
+                            - { label: Show as "current", name: isNow, widget: boolean, default: false }
+
+                - label: Chapter 03 – Featured projects
+                  name: featured
+                  widget: object
+                  fields:
+                      - { label: Chapter number, name: chapterNum, widget: string, default: "03" }
+                      - { label: Title, name: title, widget: string }
+                      - { label: See-all link, name: seeAllHref, widget: string, default: /projects/ }
+                      - label: Projects
+                        name: projectSlugs
+                        widget: list
+                        min: 1
+                        max: 4
+                        field: { label: Project slug, name: slug, widget: relation, collection: projects, search_fields: [title], value_field: '{{filename}}', display_fields: [title] }
+
+                - label: Chapter 04 – Skills
+                  name: skills
+                  widget: object
+                  fields:
+                      - { label: Chapter number, name: chapterNum, widget: string, default: "04" }
+                      - { label: Title, name: title, widget: string }
+                      - { label: Description, name: desc, widget: text }
+
+                - label: Chapter 05 – Video reel
+                  name: reel
+                  widget: object
+                  fields:
+                      - { label: Chapter number, name: chapterNum, widget: string, default: "05" }
+                      - { label: Title, name: title, widget: string }
+                      - { label: Description, name: desc, widget: text }
+                      - label: Videos
+                        name: videoSlugs
+                        widget: list
+                        min: 1
+                        field: { label: Video slug, name: slug, widget: relation, collection: videos, search_fields: [title], value_field: '{{filename}}', display_fields: [title] }
+
+                - label: Chapter 06 – Writing
+                  name: writing
+                  widget: object
+                  fields:
+                      - { label: Chapter number, name: chapterNum, widget: string, default: "06" }
+                      - { label: Title, name: title, widget: string }
+                      - { label: See-all link, name: seeAllHref, widget: string, default: /blog/ }
+                      - label: Posts
+                        name: postSlugs
+                        widget: list
+                        min: 1
+                        max: 4
+                        field: { label: Post slug, name: slug, widget: relation, collection: blog, search_fields: [title], value_field: '{{filename}}', display_fields: [title] }
+
+                - label: Chapter 07 – Contact
+                  name: contact
+                  widget: object
+                  fields:
+                      - { label: Chapter number, name: chapterNum, widget: string, default: "07" }
+                      - { label: Title, name: title, widget: string }
+                      - { label: Description, name: desc, widget: text }
+                      - label: Actions
+                        name: actions
+                        widget: list
+                        fields:
+                            - { label: Kicker (number), name: kicker, widget: string }
+                            - { label: Title, name: title, widget: string }
+                            - { label: Subtitle, name: sub, widget: string }
+                            - { label: CTA label, name: cta, widget: string }
+                            - { label: Kind, name: kind, widget: select, options: [email, link] }
+                            - { label: URL (for link kind), name: href, widget: string, required: false }
+
+    # -----------------------------------------------------------------
+    # About page (singleton)
+    # -----------------------------------------------------------------
+    - name: about
+      label: About page
+      files:
+          - file: src/content/about/about.json
+            label: About page
+            name: about
+            fields:
+                - { label: Eyebrow, name: eyebrow, widget: string }
+                - { label: Title HTML, name: titleHtml, widget: text, hint: "Allowed: <br>" }
+                - { label: Subtitle, name: sub, widget: text }
+                - label: Cards
+                  name: cards
+                  widget: list
+                  types:
+                      - label: List card
+                        name: list
+                        widget: object
+                        fields:
+                            - { label: Kind (leave "list"), name: kind, widget: hidden, default: list }
+                            - { label: Title, name: title, widget: string }
+                            - { label: Wide card?, name: wide, widget: boolean, default: false }
+                            - { label: Items, name: items, widget: list, field: { label: Item, name: item, widget: string } }
+                      - label: Text card
+                        name: text
+                        widget: object
+                        fields:
+                            - { label: Kind (leave "text"), name: kind, widget: hidden, default: text }
+                            - { label: Title, name: title, widget: string }
+                            - { label: Wide card?, name: wide, widget: boolean, default: false }
+                            - { label: Body, name: body, widget: text }
+                      - label: Stats card
+                        name: stats
+                        widget: object
+                        fields:
+                            - { label: Kind (leave "stats"), name: kind, widget: hidden, default: stats }
+                            - { label: Title, name: title, widget: string }
+                            - { label: Wide card?, name: wide, widget: boolean, default: false }
+                            - label: Stats
+                              name: items
+                              widget: list
+                              fields:
+                                  - { label: Value, name: value, widget: string }
+                                  - { label: Label, name: label, widget: string }
+                      - label: CTA card
+                        name: cta
+                        widget: object
+                        fields:
+                            - { label: Kind (leave "cta"), name: kind, widget: hidden, default: cta }
+                            - { label: Title, name: title, widget: string }
+                            - { label: Wide card?, name: wide, widget: boolean, default: false }
+                            - { label: Body, name: body, widget: text }
+                            - label: Button
+                              name: cta
+                              widget: object
+                              fields:
+                                  - { label: Label, name: label, widget: string }
+                                  - { label: URL, name: href, widget: string }
+                                  - { label: Style, name: style, widget: select, options: [primary, ghost], default: primary }
+
+    # -----------------------------------------------------------------
+    # Skills (singleton)
+    # -----------------------------------------------------------------
+    - name: skills
+      label: Skills
+      files:
+          - file: src/content/skills/skills.json
+            label: Skills
+            name: skills
+            fields:
+                - label: Groups
+                  name: groups
+                  widget: list
+                  fields:
+                      - { label: Group name, name: group, widget: string }
+                      - { label: Primary chips, name: primary, widget: list, field: { label: Chip, name: chip, widget: string } }
+                      - { label: Secondary chips, name: secondary, widget: list, field: { label: Chip, name: chip, widget: string } }
+
+    # -----------------------------------------------------------------
+    # Projects (folder / MDX)
+    # -----------------------------------------------------------------
+    - name: projects
+      label: Projects
+      label_singular: Project
+      folder: src/content/projects
+      create: true
+      delete: true
+      slug: '{{slug}}'
+      format: frontmatter
+      extension: mdx
+      identifier_field: title
+      summary: '{{title}} · {{year}}'
+      fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Summary, name: summary, widget: text }
+          - { label: Role, name: role, widget: string }
+          - { label: Year, name: year, widget: string }
+          - label: Categories
+            name: categories
+            widget: select
+            multiple: true
+            options: [banking, cloud, data, security]
+          - { label: Tags, name: tags, widget: list, field: { label: Tag, name: tag, widget: string } }
+          - { label: Impact headline, name: impact, widget: string }
+          - { label: Featured on home?, name: featured, widget: boolean, default: false }
+          - { label: Order (lower = earlier), name: order, widget: number, default: 100, value_type: int }
+          - { label: Draft (hide from site), name: draft, widget: boolean, default: false }
+          - { label: Hero eyebrow, name: heroEyebrow, widget: string, required: false }
+          - { label: Hero sub, name: heroSub, widget: text, required: false }
+          - { label: Team, name: team, widget: string, required: false }
+          - { label: Timeline, name: timeline, widget: string, required: false }
+          - { label: Stack, name: stack, widget: string, required: false }
+          - label: Video
+            name: video
+            widget: object
+            required: false
+            fields:
+                - { label: Embed URL, name: src, widget: string }
+                - label: Poster pattern
+                  name: pattern
+                  widget: select
+                  options: [poster-pattern-1, poster-pattern-2, poster-pattern-3, poster-pattern-4]
+                - { label: Caption, name: caption, widget: string, default: "Short walkthrough." }
+                - { label: Play button label, name: playLabel, widget: string, default: "Play walkthrough" }
+          - label: Related projects
+            name: related
+            widget: list
+            required: false
+            field: { label: Project, name: slug, widget: relation, collection: projects, search_fields: [title], value_field: '{{filename}}', display_fields: [title] }
+          - { label: Body (MDX), name: body, widget: markdown }
+
+    # -----------------------------------------------------------------
+    # Blog (folder / MDX)
+    # -----------------------------------------------------------------
+    - name: blog
+      label: Writing
+      label_singular: Post
+      folder: src/content/blog
+      create: true
+      delete: true
+      slug: '{{slug}}'
+      format: frontmatter
+      extension: mdx
+      identifier_field: title
+      summary: '{{title}} · {{date}}'
+      fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Excerpt, name: excerpt, widget: text }
+          - { label: Date, name: date, widget: datetime, date_format: 'YYYY-MM-DD', time_format: false, picker_utc: true }
+          - { label: Read time, name: readTime, widget: string, default: "5 min read" }
+          - { label: Category, name: category, widget: string }
+          - { label: Draft, name: draft, widget: boolean, default: false }
+          - { label: Body (MDX), name: body, widget: markdown }
+
+    # -----------------------------------------------------------------
+    # Videos (folder / JSON)
+    # -----------------------------------------------------------------
+    - name: videos
+      label: Videos
+      label_singular: Video
+      folder: src/content/videos
+      create: true
+      delete: true
+      slug: '{{slug}}'
+      format: json
+      extension: json
+      identifier_field: title
+      summary: '{{title}} · {{duration}}'
+      fields:
+          - { label: Title, name: title, widget: string }
+          - { label: Description, name: description, widget: text }
+          - { label: Duration, name: duration, widget: string, default: "0:00" }
+          - label: Poster pattern
+            name: pattern
+            widget: select
+            options: [poster-pattern-1, poster-pattern-2, poster-pattern-3, poster-pattern-4]
+          - { label: Embed URL, name: src, widget: string }
+          - { label: Case-study URL, name: href, widget: string, required: false }

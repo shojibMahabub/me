@@ -1,0 +1,109 @@
+{
+    "hero": {
+        "eyebrow": "Available for senior backend roles",
+        "titleHtml": "I build the quiet systems<br>that move <span class=\"accent\">billions</span> without<br>anyone noticing.",
+        "sub": "Backend engineer, six years deep in banking integrations, database migrations and the small-hours debugging that keeps fintech awake. This is the short version.",
+        "ctas": [
+            { "label": "Read the story", "href": "#story", "style": "primary" },
+            { "label": "See the work", "href": "/projects/", "style": "ghost" }
+        ],
+        "stats": [
+            { "value": "6+", "label": "years in backend" },
+            { "value": "160+", "label": "prod issues closed" },
+            { "value": "0", "label": "high-sev VAPTs left" },
+            { "value": "60–70%", "label": "faster QA" }
+        ],
+        "scrollLabel": "scroll"
+    },
+    "origin": {
+        "chapterNum": "01",
+        "title": "The boy who liked broken things",
+        "body": [
+            "Dhaka, 2014. A Shaheen College student who couldn't stop taking PCs apart. By 2019 I had a CS degree, a Mozilla bug-reporter badge, and a stubborn belief that the most interesting code lives inside the things nobody wants to touch — legacy databases, ledger tables, payment rails.",
+            "That's where I've been ever since."
+        ]
+    },
+    "journey": {
+        "chapterNum": "02",
+        "title": "A journey, in four beats.",
+        "items": [
+            {
+                "year": "2019",
+                "title": "First lines, first bugs.",
+                "description": "Graduated. Started writing PHP that actually shipped. Learned fast that production is a different animal.",
+                "isNow": false
+            },
+            {
+                "year": "2020",
+                "title": "Tripegate — the SaaS years.",
+                "description": "Multi-tenant travel & expense platform. First real taste of AWS, RBAC, S3 pipelines and the joy of a clean log analysis.",
+                "isNow": false
+            },
+            {
+                "year": "2023",
+                "title": "Veefin — into the banks.",
+                "description": "Supply Chain Finance. Yes Bank, SBI, IDFC. Real money, real batches, real 3 AM calls. I found my lane.",
+                "isNow": false
+            },
+            {
+                "year": "Now",
+                "title": "Scaling what works.",
+                "description": "Migrations, hardening, mentoring. Looking for the next system that needs quiet, stubborn backend work.",
+                "isNow": true
+            }
+        ]
+    },
+    "featured": {
+        "chapterNum": "03",
+        "title": "Three projects that shaped the engineer.",
+        "seeAllHref": "/projects/",
+        "projectSlugs": ["yes-bank-migration", "veefin-scf", "payments"]
+    },
+    "skills": {
+        "chapterNum": "04",
+        "title": "The stack I think in.",
+        "desc": "Not a laundry list. The tools I reach for without thinking."
+    },
+    "reel": {
+        "chapterNum": "05",
+        "title": "Show, don't tell.",
+        "desc": "Short walkthroughs of systems I've shipped. Click to play.",
+        "videoSlugs": ["migration-walkthrough", "scf-product-tour", "reconciliation-demo", "qa-docker"]
+    },
+    "writing": {
+        "chapterNum": "06",
+        "title": "Notes from the trenches.",
+        "seeAllHref": "/blog/",
+        "postSlugs": ["migration-that-earned-an-award", "docker-qa-70-percent", "zero-high-sev-vapts"]
+    },
+    "contact": {
+        "chapterNum": "07",
+        "title": "The next chapter is yours.",
+        "desc": "Hiring for a backend that can't afford to misbehave? Migrating a legacy system? Want a second pair of eyes on a payment flow? Pick a way in.",
+        "actions": [
+            {
+                "kicker": "01",
+                "title": "Write me",
+                "sub": "Hit this for the email.",
+                "cta": "Reveal & copy →",
+                "kind": "email"
+            },
+            {
+                "kicker": "02",
+                "title": "Message on LinkedIn",
+                "sub": "Fastest for recruiters.",
+                "cta": "Open ↗",
+                "kind": "link",
+                "href": "https://www.linkedin.com/in/mahabubelahi"
+            },
+            {
+                "kicker": "03",
+                "title": "Read the code",
+                "sub": "Selected repos on GitHub.",
+                "cta": "Open ↗",
+                "kind": "link",
+                "href": "https://github.com/shojibMahabub"
+            }
+        ]
+    }
+}

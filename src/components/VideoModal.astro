@@ -1,0 +1,27 @@
+---
+// Bootstrap modal we attach to every page. Opened by any [data-video-open].
+---
+
+<div
+    class="modal fade video-modal"
+    id="siteVideoModal"
+    tabindex="-1"
+    aria-labelledby="siteVideoModalLabel"
+    aria-hidden="true"
+    data-video-modal
+>
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <button
+                type="button"
+                class="modal-close-floating"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+            >×</button>
+            <h2 id="siteVideoModalLabel" class="visually-hidden">Video player</h2>
+            <div class="modal-body">
+                <div class="video-frame" data-video-frame></div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+    id?: string;
+    chapterNum: string;
+    title: string;
+    seeAllHref: string;
+    posts: CollectionEntry<'blog'>[];
+    dark?: boolean;
+}
+const { id, chapterNum, title, seeAllHref, posts, dark = true } = Astro.props;
+
+const formatDate = (d: Date) =>
+    d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+---
+
+<section id={id} class:list={['chapter', dark && 'chapter-dark']}>
+    <div class="container-xxl">
+        <div class="chapter-head">
+            <span class="chapter-num">{chapterNum}</span>
+            <h2 class="chapter-title">{title}</h2>
+        </div>
+
+        <div class="row g-4">
+            {posts.map((post) => (
+                <div class="col-md-6 col-lg-4">
+                    <a class="post-card" href={`/blog/${post.id}/`}>
+                        <div class="post-card-meta">
+                            <span>{post.data.category}</span>
+                            <span class="dot"></span>
+                            <span>{post.data.readTime}</span>
+                            <span class="dot"></span>
+                            <span>{formatDate(post.data.date)}</span>
+                        </div>
+                        <h3>{post.data.title}</h3>
+                        <p>{post.data.excerpt}</p>
+                        <span class="post-card-link">Read →</span>
+                    </a>
+                </div>
+            ))}
+        </div>
+
+        <a class="chapter-link mt-4 d-inline-block" href={seeAllHref}>All writing →</a>
+    </div>
+</section>

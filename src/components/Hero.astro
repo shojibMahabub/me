@@ -1,0 +1,44 @@
+---
+interface Cta { label: string; href: string; style: 'primary' | 'ghost' }
+interface Stat { value: string; label: string }
+interface Props {
+    eyebrow: string;
+    titleHtml: string;
+    sub: string;
+    ctas: Cta[];
+    stats: Stat[];
+    scrollLabel: string;
+}
+const { eyebrow, titleHtml, sub, ctas, stats, scrollLabel } = Astro.props;
+---
+
+<section class="hero">
+    <div class="container-xxl">
+        <div class="hero-copy">
+            <span class="eyebrow"><span class="eyebrow-dot"></span>{eyebrow}</span>
+            <h1 class="hero-title mt-4" set:html={titleHtml}></h1>
+            <p class="hero-sub">{sub}</p>
+            <div class="d-flex flex-wrap gap-3">
+                {ctas.map((cta) => (
+                    <a
+                        href={cta.href}
+                        class:list={[
+                            'btn',
+                            cta.style === 'primary' ? 'btn-dark btn-lg' : 'btn-outline-dark btn-lg',
+                        ]}
+                    >{cta.label}</a>
+                ))}
+            </div>
+
+            <div class="hero-stats">
+                {stats.map((stat) => (
+                    <div>
+                        <strong>{stat.value}</strong>
+                        <span>{stat.label}</span>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </div>
+    <span class="hero-scroll d-none d-md-block">{scrollLabel}</span>
+</section>

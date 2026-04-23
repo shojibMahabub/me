@@ -1,0 +1,29 @@
+---
+interface Props {
+    id?: string;
+    chapterNum: string;
+    title: string;
+    dark?: boolean;
+    paragraphs?: string[];
+    link?: { label: string; href: string };
+}
+const { id, chapterNum, title, dark = false, paragraphs = [], link } = Astro.props;
+---
+
+<section id={id} class:list={['chapter', dark && 'chapter-dark']}>
+    <div class="container-xxl">
+        <div class="chapter-head">
+            <span class="chapter-num">{chapterNum}</span>
+            <h2 class="chapter-title">{title}</h2>
+        </div>
+        {paragraphs.length > 0 && (
+            <div class="chapter-body">
+                {paragraphs.map((p) => <p>{p}</p>)}
+            </div>
+        )}
+        {link && (
+            <a class="chapter-link" href={link.href}>{link.label}</a>
+        )}
+        <slot />
+    </div>
+</section>

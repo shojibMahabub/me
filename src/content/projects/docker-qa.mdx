@@ -1,0 +1,28 @@
+---
+title: "Docker-based QA environments"
+summary: "Personal on-premises database containers for every QA engineer. Reset in 2 minutes. Never stepped on toes again."
+role: "Infra & DevOps"
+year: "2023"
+categories: ["cloud"]
+tags: ["Docker", "Podman", "Linux", "Automation"]
+impact: "60–70% faster QA cycles"
+featured: false
+order: 10
+heroEyebrow: "DevOps · 2023"
+heroSub: "A small infrastructure project that cut QA cycles by two thirds and gave every engineer an isolated database in under two minutes."
+stack: "Docker, Podman, Linux, Make"
+---
+
+QA used to mean a ticket, a DBA, twenty minutes of waiting, and the risk that another tester was halfway through a case that would now be wiped.
+
+We containerised the on-premises databases, seeded from a sanitised production snapshot, and handed every QA engineer their own spin-up-on-demand database.
+
+The full story, including the numbers and what I would do differently, is written up here:
+
+- [How Docker cut our QA time by 70%](/blog/docker-qa-70-percent/)
+
+## The headline
+
+- Average QA cycle went from about **35 minutes to about 10**.
+- Environment-related bugs dropped to near zero.
+- Regressions from "wrong data" in test envs became a memory.

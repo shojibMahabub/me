@@ -1,0 +1,64 @@
+{
+    "eyebrow": "About",
+    "titleHtml": "I'm Mahabub.<br>Backend engineer,<br>Dhaka-based.",
+    "sub": "Six years writing the code that processes money. This is the short version of what I care about and how I work.",
+    "cards": [
+        {
+            "kind": "list",
+            "title": "What I do best",
+            "wide": false,
+            "items": [
+                "Banking & payment integrations that don't lose rows.",
+                "Large database migrations with validation you can trust.",
+                "Security hardening until the VAPT report is boring.",
+                "Cloud & Docker environments that QA actually enjoys."
+            ]
+        },
+        {
+            "kind": "list",
+            "title": "How I work",
+            "wide": false,
+            "items": [
+                "Read the logs first. The system already knows what's wrong.",
+                "Small, reversible changes. Especially at 3 AM.",
+                "Write the playbook. If I solved it twice, it gets a doc.",
+                "Default to boring tech. Novelty is a last resort."
+            ]
+        },
+        {
+            "kind": "stats",
+            "title": "The highlights",
+            "wide": true,
+            "items": [
+                { "value": "160+", "label": "production / UAT issues closed" },
+                { "value": "60-70%", "label": "faster QA with Docker DBs" },
+                { "value": "0", "label": "high-sev VAPT findings left open" },
+                { "value": "3", "label": "Indian banks integrated end-to-end" }
+            ]
+        },
+        {
+            "kind": "text",
+            "title": "Currently",
+            "wide": false,
+            "body": "Software Engineer at Veefin Solutions — leading backend work on a supply chain finance platform used by Indian banks. Previously at Tripegate (2020–2023), building a multi-tenant travel & expense SaaS."
+        },
+        {
+            "kind": "list",
+            "title": "Education & off-hours",
+            "wide": false,
+            "items": [
+                "B.Sc. Computer Science & Engineering — Institute of Science and Technology, 2019.",
+                "H.S.C. — BAF Shaheen College Dhaka, 2014.",
+                "Mozilla Foundation — early-stage build testing & bug reports.",
+                "BNCC (Bangladesh National Cadet Corps) — discipline, coordination."
+            ]
+        },
+        {
+            "kind": "cta",
+            "title": "Let's work.",
+            "wide": true,
+            "body": "Remote-friendly. Fluent in English & Bengali. Available for senior backend, platform or fintech engineering roles.",
+            "cta": { "label": "Get in touch →", "href": "/#contact", "style": "primary" }
+        }
+    ]
+}

@@ -1,0 +1,29 @@
+---
+title: "Zero high-sev VAPTs. A playbook."
+excerpt: "From a red penetration test report to a boring one, without grinding the team into the ground."
+date: 2026-02-08
+readTime: "5 min read"
+category: "Security"
+---
+
+The first VAPT report I ever saw for our platform had a lot of red. Weak encryption in a handful of places, access-control gaps in admin endpoints, a login flow that revealed more than it should. Nothing exotic. All fixable. All urgent, because banks don't negotiate on this.
+
+## Step 1. Triage like a grown-up.
+
+Not every finding is equal. I split them into three buckets: *exploitable today*, *exploitable with effort*, *theoretical*. We attacked the first bucket the same week. The second got a two-sprint budget. The third got a ticket and a comment.
+
+## Step 2. Fix the class, not the case.
+
+A single encryption miss is a bug. Three encryption misses in three places is an architecture problem. We introduced a single crypto helper, migrated every sensitive field through it, and removed the ability to accidentally write plaintext going forward.
+
+## Step 3. RBAC, not role-spaghetti.
+
+Admin endpoints were checked in five different styles. We collapsed them into a policy layer, drew a matrix of roles × resources × actions, and made the matrix the source of truth. Suddenly new endpoints got access-controlled by default instead of by memory.
+
+## Step 4. Log the boring stuff.
+
+Half of the remaining findings disappeared once we had real audit trails. Not because the code changed, but because the pentester could now see that yes, we actually do detect brute force, we do rotate secrets, we do invalidate tokens.
+
+## The outcome
+
+Zero high-severity findings in the follow-up report. More importantly, the team stopped treating security as a fire drill and started treating it as table stakes. That's the part I'm proud of.

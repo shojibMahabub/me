@@ -1,0 +1,80 @@
+---
+import '../styles/global.scss';
+import { getEntry } from 'astro:content';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import VideoModal from '../components/VideoModal.astro';
+
+interface Props {
+    title?: string;
+    description?: string;
+    ogImage?: string;
+    activeNav?: string;
+    pathname?: string;
+    includeVideoModal?: boolean;
+}
+
+const {
+    title,
+    description,
+    ogImage,
+    activeNav,
+    pathname = Astro.url.pathname,
+    includeVideoModal = true,
+} = Astro.props;
+
+const siteEntry = await getEntry('site', 'site');
+if (!siteEntry) throw new Error('Missing src/content/site/site.json');
+const site = siteEntry.data;
+
+const pageTitle = title ? `${title} — ${site.title}` : `${site.title} — ${site.tagline}`;
+const metaDescription = description ?? site.seo.description ?? site.tagline;
+const socialImage = new URL(ogImage ?? site.seo.ogImage ?? '/favicon.svg', Astro.site).href;
+const canonical = new URL(pathname, Astro.site).href;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={metaDescription} />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={metaDescription} />
+    <meta name="twitter:image" content={socialImage} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${site.title} · Writing`} href="/rss.xml" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+    <meta name="generator" content={Astro.generator} />
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <Nav site={site} pathname={pathname} activeNav={activeNav} />
+
+    <main id="main">
+        <slot />
+    </main>
+
+    <Footer site={site} />
+
+    {includeVideoModal && <VideoModal />}
+
+    <script src="../scripts/site.ts"></script>
+</body>
+</html>

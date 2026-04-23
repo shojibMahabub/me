@@ -1,0 +1,27 @@
+---
+title: "Zero high-severity VAPT findings"
+summary: "Encryption, access control and audit logging rebuilt around the penetration test, not after it."
+role: "Security lead, platform"
+year: "2023"
+categories: ["security"]
+tags: ["Security", "VAPT", "RBAC", "AES-256", "OAuth"]
+impact: "0 high-sev findings left open"
+featured: false
+order: 11
+heroEyebrow: "Security · 2023"
+heroSub: "Turning a red VAPT report into a boring one, without grinding the team into the ground."
+stack: "OAuth 2.0, AES-256, RBAC, Laravel"
+---
+
+The first VAPT report we saw had a lot of red. Weak encryption in a handful of places, access-control gaps in admin endpoints, a login flow that revealed more than it should.
+
+We triaged by risk, fixed the class instead of the case, collapsed role-spaghetti into a single policy matrix, and logged the boring stuff so the pentester could see that things were actually happening.
+
+The playbook is written up here:
+
+- [Zero high-sev VAPTs. A playbook.](/blog/zero-high-sev-vapts/)
+
+## The headline
+
+- Zero high-severity findings in the follow-up report.
+- Security stopped being a fire drill and started being table stakes.

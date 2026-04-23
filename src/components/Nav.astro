@@ -1,0 +1,85 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props {
+    site: CollectionEntry<'site'>['data'];
+    pathname?: string;
+    activeNav?: string;
+}
+const { site, pathname = '/', activeNav } = Astro.props;
+
+const isActive = (link: { label: string; href: string }) => {
+    if (activeNav) return link.label.toLowerCase() === activeNav.toLowerCase();
+    if (link.href === '/') return pathname === '/' || pathname === '';
+    if (link.href.startsWith('/#')) return false;
+    const normalised = link.href.replace(/\/$/, '');
+    const current = pathname.replace(/\/$/, '');
+    return current === normalised || current.startsWith(normalised + '/');
+};
+---
+
+<nav class="site-nav navbar navbar-expand-lg" data-nav>
+    <div class="container-xxl">
+        <a class="navbar-brand" href="/">
+            <span class="navbar-brand-mark">{site.brand.mark}</span>
+            <span>{site.brand.text}</span>
+        </a>
+
+        <button
+            class="navbar-toggler border-0"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#siteOffcanvas"
+            aria-controls="siteOffcanvas"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse d-none d-lg-flex">
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+                {site.navLinks.map((link) => (
+                    <li class="nav-item">
+                        <a
+                            class:list={[
+                                'nav-link',
+                                link.cta && 'nav-cta',
+                                isActive(link) && 'active',
+                            ]}
+                            href={link.href}
+                            aria-current={isActive(link) ? 'page' : undefined}
+                        >
+                            {link.label}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+        </div>
+
+        <div
+            class="offcanvas offcanvas-end d-lg-none"
+            tabindex="-1"
+            id="siteOffcanvas"
+            aria-labelledby="siteOffcanvasLabel"
+        >
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="siteOffcanvasLabel">{site.brand.text}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <ul class="navbar-nav gap-2">
+                    {site.navLinks.map((link) => (
+                        <li class="nav-item">
+                            <a
+                                class:list={['nav-link', link.cta && 'nav-cta', isActive(link) && 'active']}
+                                href={link.href}
+                            >
+                                {link.label}
+                            </a>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>

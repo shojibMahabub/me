@@ -1,0 +1,34 @@
+{
+    "groups": [
+        {
+            "group": "Languages & frameworks",
+            "primary": ["PHP 8", "Laravel", "Symfony", "Lumen"],
+            "secondary": ["OOP", "Design patterns", "REST APIs"]
+        },
+        {
+            "group": "Databases",
+            "primary": ["MySQL", "Oracle", "PostgreSQL"],
+            "secondary": ["Redis", "Query tuning", "Migrations", "Replication"]
+        },
+        {
+            "group": "Cloud & DevOps",
+            "primary": ["AWS (EC2/S3/IAM/VPC)", "Docker", "Podman"],
+            "secondary": ["CI/CD", "Nginx", "Linux", "Git"]
+        },
+        {
+            "group": "Messaging & async",
+            "primary": ["RabbitMQ", "Queue workers"],
+            "secondary": ["Background jobs", "Event handling", "Idempotency"]
+        },
+        {
+            "group": "Security",
+            "primary": ["AES-256", "OAuth 2.0", "RBAC"],
+            "secondary": ["VAPT remediation", "API hardening", "Audit logging"]
+        },
+        {
+            "group": "Domain",
+            "primary": ["Banking", "Fintech", "SCF"],
+            "secondary": ["Payments", "Reconciliation", "Travel & expense"]
+        }
+    ]
+}

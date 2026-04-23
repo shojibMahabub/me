@@ -1,0 +1,36 @@
+---
+title: "How Docker cut our QA time by 70%"
+excerpt: "A small infrastructure change that did more for morale than any standup ever did."
+date: 2026-03-20
+readTime: "4 min read"
+category: "DevOps"
+---
+
+QA was the bottleneck. Not because they were slow — because the environment was.
+
+## The old way
+
+Every time a QA engineer wanted to test a fix, they requested a database reset. That meant a ticket, a DBA, twenty minutes of waiting, and the risk that another tester was halfway through a case that would now be wiped.
+
+## The new way
+
+We built Docker images of the on-premises databases, seeded with a sanitised production snapshot. Each QA engineer could spin up their own isolated database in under two minutes, run destructive tests, and throw it away.
+
+```bash
+# Spin up a personal DB for the branch you're testing
+make qa-db BRANCH=fix/idfc-batch-id
+# you get: postgres://qa_fix-idfc-batch-id.local:5432
+# seeded, isolated, yours
+```
+
+## The numbers
+
+- Average QA cycle went from **about 35 minutes to about 10**.
+- Environment-related bugs in release notes dropped to near zero.
+- Regressions from "wrong data" in test envs became a memory.
+
+## What I'd do differently
+
+I'd start with rootless containers (Podman) from day one. The permission debugging we did in week three would have been avoidable. And I'd invest in a better sanitisation pipeline — the first one was a hand-written SQL script and it showed.
+
+Interested in the config? Ping me — happy to share the skeleton.

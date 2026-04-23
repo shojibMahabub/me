@@ -1,0 +1,36 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props { post: CollectionEntry<'blog'>; }
+const { post } = Astro.props;
+const d = post.data;
+const formatDate = (dt: Date) =>
+    dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<BaseLayout
+    title={d.title}
+    description={d.excerpt}
+    activeNav="Writing"
+>
+    <article class="post-article">
+        <div class="container-xxl">
+            <a class="case-back" href="/blog/">← All writing</a>
+
+            <header class="post-head">
+                <span class="post-meta">{d.category} · {d.readTime} · {formatDate(d.date)}</span>
+                <h1 class="post-title">{d.title}</h1>
+                <p class="post-sub">{d.excerpt}</p>
+            </header>
+
+            <div class="post-body">
+                <slot />
+            </div>
+
+            <div class="case-foot">
+                <a class="case-back" href="/blog/">← All writing</a>
+            </div>
+        </div>
+    </article>
+</BaseLayout>

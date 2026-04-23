@@ -1,0 +1,62 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+    project: CollectionEntry<'projects'>;
+    nextSlug?: string | null;
+}
+const { project, nextSlug } = Astro.props;
+const d = project.data;
+---
+
+<BaseLayout
+    title={d.title}
+    description={d.summary}
+    activeNav="Projects"
+>
+    <article class="case">
+        <div class="container-xxl">
+            <a class="case-back" href="/projects/">← All projects</a>
+
+            <header class="case-head">
+                <span class="eyebrow"><span class="eyebrow-dot"></span>{d.heroEyebrow ?? `${d.categories[0]} · ${d.year}`}</span>
+                <h1 class="case-title">{d.title}</h1>
+                {d.heroSub && <p class="case-sub">{d.heroSub}</p>}
+                <dl class="case-meta">
+                    <div><dt>Role</dt><dd>{d.role}</dd></div>
+                    {d.team && <div><dt>Team</dt><dd>{d.team}</dd></div>}
+                    {d.timeline && <div><dt>Timeline</dt><dd>{d.timeline}</dd></div>}
+                    {d.stack && <div><dt>Stack</dt><dd>{d.stack}</dd></div>}
+                </dl>
+            </header>
+
+            {d.video && (
+                <figure class="case-video">
+                    <button
+                        class="case-video-poster"
+                        type="button"
+                        data-video-open={d.video.src}
+                        aria-label={d.video.playLabel}
+                    >
+                        <div class={`poster-pattern ${d.video.pattern}`}></div>
+                        <span class="video-play" aria-hidden="true" style="pointer-events:none;">
+                            <span class="video-play-icon">▶</span>
+                            <span class="video-play-label">{d.video.playLabel}</span>
+                        </span>
+                    </button>
+                    <figcaption>{d.video.caption}</figcaption>
+                </figure>
+            )}
+
+            <div class="case-body">
+                <slot />
+            </div>
+
+            <div class="case-foot d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <a class="case-back" href="/projects/">← All projects</a>
+                {nextSlug && <a class="case-nav" href={`/projects/${nextSlug}/`}>Next case study →</a>}
+            </div>
+        </div>
+    </article>
+</BaseLayout>

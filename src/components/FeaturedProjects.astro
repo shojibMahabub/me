@@ -1,0 +1,32 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ProjectCard from './ProjectCard.astro';
+
+interface Props {
+    id?: string;
+    chapterNum: string;
+    title: string;
+    seeAllHref: string;
+    projects: CollectionEntry<'projects'>[];
+}
+const { id, chapterNum, title, seeAllHref, projects } = Astro.props;
+---
+
+<section id={id} class="chapter">
+    <div class="container-xxl">
+        <div class="chapter-head">
+            <span class="chapter-num">{chapterNum}</span>
+            <h2 class="chapter-title">{title}</h2>
+        </div>
+
+        <div class="row g-4 featured-grid">
+            {projects.map((project, idx) => (
+                <div class:list={[idx === 0 ? 'col-12' : 'col-md-6']}>
+                    <ProjectCard project={project} variant={idx === 0 ? 'lead' : 'default'} />
+                </div>
+            ))}
+        </div>
+
+        <a class="chapter-link mt-4 d-inline-block" href={seeAllHref}>All projects →</a>
+    </div>
+</section>

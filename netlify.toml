@@ -1,0 +1,65 @@
+# =====================================================================
+# Netlify build + routing + header configuration
+#
+# This file assumes the "site/" directory IS the repo root on GitHub.
+# If you instead push the whole workspace (with portfolio/ as legacy/
+# alongside site/), delete this file and use /netlify.toml at the
+# workspace root (which passes base = "site" to Netlify).
+# =====================================================================
+
+[build]
+    command = "npm run build"
+    publish = "dist"
+
+[build.environment]
+    NODE_VERSION = "20"
+    ASTRO_TELEMETRY_DISABLED = "1"
+
+# ---------------------------------------------------------------------
+# Decap CMS single-page app at /admin. Without this rewrite the
+# netlify-identity widget hash fragment can break deep links.
+# ---------------------------------------------------------------------
+[[redirects]]
+    from   = "/admin/*"
+    to     = "/admin/index.html"
+    status = 200
+
+# Safety-net redirects from the legacy static site's .html URLs.
+[[redirects]]
+    from   = "/blog/:slug.html"
+    to     = "/blog/:slug/"
+    status = 301
+
+[[redirects]]
+    from   = "/projects/:slug.html"
+    to     = "/projects/:slug/"
+    status = 301
+
+# ---------------------------------------------------------------------
+# Security headers. Tighten CSP once the site is stable and Decap is
+# confirmed working end-to-end.
+# ---------------------------------------------------------------------
+[[headers]]
+    for = "/*"
+    [headers.values]
+        X-Frame-Options           = "SAMEORIGIN"
+        X-Content-Type-Options    = "nosniff"
+        Referrer-Policy           = "strict-origin-when-cross-origin"
+        Permissions-Policy        = "camera=(), microphone=(), geolocation=()"
+        Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+
+[[headers]]
+    for = "/admin/*"
+    [headers.values]
+        X-Frame-Options = "SAMEORIGIN"
+        Cache-Control   = "no-cache, no-store, must-revalidate"
+
+[[headers]]
+    for = "/_astro/*"
+    [headers.values]
+        Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+    for = "/images/*"
+    [headers.values]
+        Cache-Control = "public, max-age=31536000, immutable"

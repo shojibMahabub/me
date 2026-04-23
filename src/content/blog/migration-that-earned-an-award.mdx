@@ -1,0 +1,36 @@
+---
+title: "The migration that earned an award"
+excerpt: "Four months of moving a live financial ledger without losing a single paisa. A field report."
+date: 2026-04-12
+readTime: "6 min read"
+category: "Banking"
+---
+
+I've done plenty of migrations. This one was different because a bank was watching.
+
+## The setup
+
+Our supply chain finance platform ran on MySQL. Yes Bank India wanted to go live on it, but their policy required Oracle. We had one choice: move everything over — schemas, stored procedures, application code, background jobs, the ledger — while development on other banks kept going.
+
+## Where we started
+
+Weeks one and two were the humbling part. MySQL and Oracle disagree about small, important things: auto-increment keys vs sequences, JSON handling, timestamp precision, reserved words, case sensitivity. We spent days cataloguing every assumption our codebase made and wasn't aware of.
+
+## Dual-writes and diffs
+
+The play that saved us was building a dual-write shadow. For three weeks before the cut-over, every write hit both databases. Every night, a job walked 40+ critical tables, compared row counts and column-level checksums, and screamed at us in Slack if anything drifted.
+
+It drifted twice. Once from JSON serialization (MySQL kept insertion order, Oracle did not — a problem when a downstream parser cared). Once from a DST boundary in a timestamp column. Both would have been nightmares in production.
+
+## The cut-over
+
+A 6-hour maintenance window. Freeze writes, run a final diff, flip the config, warm up the workers, unfreeze. The rollback script was one command. We wrote it early and never used it.
+
+## What I actually learned
+
+- A big migration is 90% discipline, 10% SQL.
+- The diff harness is the product. The migration is a side-effect.
+- Dual-write for longer than you want to. You'll find real bugs only by watching the two systems disagree for a while.
+- Write the rollback script first. It focuses the mind.
+
+Full case study with architecture and code samples: [Yes Bank migration](/projects/yes-bank-migration/).

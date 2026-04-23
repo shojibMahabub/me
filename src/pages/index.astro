@@ -1,0 +1,108 @@
+---
+import { getEntry, getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import StoryChapter from '../components/StoryChapter.astro';
+import Timeline from '../components/Timeline.astro';
+import FeaturedProjects from '../components/FeaturedProjects.astro';
+import Skills from '../components/Skills.astro';
+import VideoReel from '../components/VideoReel.astro';
+import PostsGrid from '../components/PostsGrid.astro';
+import ContactCard from '../components/ContactCard.astro';
+
+const homeEntry = await getEntry('home', 'home');
+const siteEntry = await getEntry('site', 'site');
+const skillsEntry = await getEntry('skills', 'skills');
+if (!homeEntry || !siteEntry || !skillsEntry) throw new Error('Missing singleton content');
+const home = homeEntry.data;
+const site = siteEntry.data;
+const skills = skillsEntry.data;
+
+// Resolve references
+const allProjects = await getCollection('projects', (p) => !p.data.draft);
+const allPosts = await getCollection('blog', (p) => !p.data.draft);
+const allVideos = await getCollection('videos');
+
+const featuredProjects = home.featured.projectSlugs
+    .map((ref) => allProjects.find((p) => p.id === ref.id))
+    .filter((p): p is NonNullable<typeof p> => Boolean(p));
+
+const reelVideos = home.reel.videoSlugs
+    .map((ref) => allVideos.find((v) => v.id === ref.id))
+    .filter((v): v is NonNullable<typeof v> => Boolean(v));
+
+const featuredPosts = home.writing.postSlugs
+    .map((ref) => allPosts.find((p) => p.id === ref.id))
+    .filter((p): p is NonNullable<typeof p> => Boolean(p));
+---
+
+<BaseLayout activeNav="Story">
+    <Hero
+        eyebrow={home.hero.eyebrow}
+        titleHtml={home.hero.titleHtml}
+        sub={home.hero.sub}
+        ctas={home.hero.ctas}
+        stats={home.hero.stats}
+        scrollLabel={home.hero.scrollLabel}
+    />
+
+    <StoryChapter
+        id="story"
+        chapterNum={home.origin.chapterNum}
+        title={home.origin.title}
+        paragraphs={home.origin.body}
+    />
+
+    <StoryChapter
+        id="journey"
+        chapterNum={home.journey.chapterNum}
+        title={home.journey.title}
+        dark={true}
+    >
+        <Timeline items={home.journey.items} />
+    </StoryChapter>
+
+    <FeaturedProjects
+        id="projects"
+        chapterNum={home.featured.chapterNum}
+        title={home.featured.title}
+        seeAllHref={home.featured.seeAllHref}
+        projects={featuredProjects}
+    />
+
+    <Skills
+        id="skills"
+        chapterNum={home.skills.chapterNum}
+        title={home.skills.title}
+        desc={home.skills.desc}
+        groups={skills.groups}
+    />
+
+    <VideoReel
+        id="reel"
+        chapterNum={home.reel.chapterNum}
+        title={home.reel.title}
+        desc={home.reel.desc}
+        videos={reelVideos}
+    />
+
+    <PostsGrid
+        id="writing"
+        chapterNum={home.writing.chapterNum}
+        title={home.writing.title}
+        seeAllHref={home.writing.seeAllHref}
+        posts={featuredPosts}
+        dark={true}
+    />
+
+    <ContactCard
+        id="contact"
+        chapterNum={home.contact.chapterNum}
+        title={home.contact.title}
+        desc={home.contact.desc}
+        actions={home.contact.actions}
+        phoneNote={site.contact.phoneNote}
+        emailUserB64={site.contact.emailUserB64}
+        emailDomainB64={site.contact.emailDomainB64}
+    />
+</BaseLayout>

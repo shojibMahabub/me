@@ -1,0 +1,58 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const aboutEntry = await getEntry('about', 'about');
+if (!aboutEntry) throw new Error('Missing src/content/about/about.json');
+const about = aboutEntry.data;
+---
+
+<BaseLayout
+    title="About"
+    description="Short version: six years backend, Dhaka-based, happier when the logs are quiet."
+    activeNav="About"
+>
+    <header class="page-head container-xxl">
+        <span class="eyebrow"><span class="eyebrow-dot"></span>{about.eyebrow}</span>
+        <h1 class="page-title" set:html={about.titleHtml}></h1>
+        <p class="page-sub">{about.sub}</p>
+    </header>
+
+    <section class="container-xxl pb-5">
+        <div class="row g-4">
+            {about.cards.map((card) => (
+                <div class:list={['col-12', card.wide ? 'col-lg-12' : 'col-lg-6']}>
+                    <div class:list={['about-card', card.kind === 'cta' && 'about-card-cta']}>
+                        <h2>{card.title}</h2>
+
+                        {card.kind === 'list' && (
+                            <ul class="neat-list">
+                                {card.items.map((item) => <li>{item}</li>)}
+                            </ul>
+                        )}
+
+                        {card.kind === 'text' && <p>{card.body}</p>}
+
+                        {card.kind === 'stats' && (
+                            <div class="about-stats">
+                                {card.items.map((stat) => (
+                                    <div>
+                                        <strong>{stat.value}</strong>
+                                        <span>{stat.label}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+
+                        {card.kind === 'cta' && (
+                            <>
+                                <p>{card.body}</p>
+                                <a class="btn btn-lg" href={card.cta.href}>{card.cta.label}</a>
+                            </>
+                        )}
+                    </div>
+                </div>
+            ))}
+        </div>
+    </section>
+</BaseLayout>

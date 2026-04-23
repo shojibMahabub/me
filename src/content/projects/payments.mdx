@@ -1,0 +1,47 @@
+---
+title: "Payment workflows that heal themselves"
+summary: "Idempotent disbursements, replayable batches, and morning-after reconciliations you can trust."
+role: "Owner, payments subsystem"
+year: "2023 – today"
+categories: ["banking", "cloud"]
+tags: ["RabbitMQ", "AWS", "Reconciliation", "SBI", "IDFC"]
+impact: "99.9% job success · 0 duplicates YTD"
+featured: true
+order: 3
+heroEyebrow: "Banking · Reliability · 2023 – today"
+heroSub: "Idempotent disbursements, replayable batches and reconciliations you can trust the next morning."
+team: "2 backend + 1 SRE"
+timeline: "Ongoing"
+stack: "PHP 8, RabbitMQ, Oracle, Redis, AWS"
+video:
+  src: "https://www.youtube.com/embed/dQw4w9WgXcQ"
+  pattern: "poster-pattern-3"
+  caption: "End-to-end: payment request, queue worker, bank adapter, reconciliation job."
+  playLabel: "Play reconciliation demo"
+related:
+  - "yes-bank-migration"
+  - "veefin-scf"
+---
+
+## 01 · The principle
+
+> A payment system is measured by what happens when it fails, not when it works.
+
+Every workflow I own is built around three rules: **idempotent on retry**, **observable in real time**, **reversible within one operator step**.
+
+## 02 · What's inside
+
+- Request → queue → adapter pattern so bank outages become back-pressure, not data loss.
+- IDFC batch-ID generation with a deterministic seed and duplicate-detection table.
+- SBI workflow hardening: retries with exponential backoff and a poison-letter queue.
+- Reconciliation job that cross-checks our ledger against the bank statement every morning.
+- IFSC validator with caching, TTL, and weekly refresh from the authoritative source.
+
+## 03 · The outcome
+
+<div class="metric-row not-prose">
+  <div class="metric"><strong>99.9%</strong><span>payment job success</span></div>
+  <div class="metric"><strong>&lt; 1</strong><span>paisa drift / month</span></div>
+  <div class="metric"><strong>0</strong><span>duplicate disbursements YTD</span></div>
+  <div class="metric"><strong>⇡</strong><span>ops team sleeps better</span></div>
+</div>

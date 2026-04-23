@@ -1,0 +1,60 @@
+---
+title: "Yes Bank · MySQL → Oracle migration"
+summary: "Moving a live financial ledger between two databases without losing a row. Awarded internally."
+role: "Backend lead on migration"
+year: "2024"
+categories: ["banking", "data"]
+tags: ["Oracle", "MySQL", "Migration", "Laravel"]
+impact: "0 rows lost · 1 new bank onboarded"
+featured: true
+order: 1
+heroEyebrow: "Banking · Data · 2024"
+heroSub: "Leading Veefin's MySQL → Oracle migration for Yes Bank India's supply chain finance onboarding."
+team: "4 engineers, 2 DBAs"
+timeline: "~4 months"
+stack: "Oracle, MySQL, PHP 8, Laravel, RabbitMQ"
+video:
+  src: "https://www.youtube.com/embed/dQw4w9WgXcQ"
+  pattern: "poster-pattern-1"
+  caption: "A short screen walkthrough of the migration pipeline and validation harness."
+  playLabel: "Play 2-min walkthrough"
+related:
+  - "veefin-scf"
+  - "payments"
+---
+
+## 01 · The problem
+
+Yes Bank India couldn't onboard unless we supported Oracle. Our platform ran on MySQL, with years of SCF ledger data, batch jobs, stored procedures and a payment reconciliation layer no one wanted to touch. Go-live had a hard date.
+
+> Migrate a live financial ledger, keep every paisa intact, and don't slow down the teams shipping features next to you.
+
+## 02 · The approach
+
+- Built an abstraction layer so application code wrote SQL once and both engines accepted it.
+- Translated MySQL-isms (auto-increment, JSON columns, backticks) into Oracle-safe equivalents with a shared migration toolkit.
+- Ran a dual-write shadow for 3 weeks against a live sandbox, comparing checksums nightly.
+- Cut-over in a 6-hour maintenance window with a scripted rollback we never had to use.
+
+```js
+// Row-count + checksum diff harness (conceptual)
+for (const table of criticalTables) {
+  const mysql  = await mysqlRow(table)
+  const oracle = await oracleRow(table)
+  if (mysql.count !== oracle.count) alert(table, 'count-drift')
+  if (mysql.hash  !== oracle.hash)  alert(table, 'hash-drift')
+}
+```
+
+## 03 · The outcome
+
+<div class="metric-row not-prose">
+  <div class="metric"><strong>0</strong><span>rows lost at cut-over</span></div>
+  <div class="metric"><strong>6 hrs</strong><span>maintenance window</span></div>
+  <div class="metric"><strong>1</strong><span>new bank onboarded</span></div>
+  <div class="metric"><strong>★</strong><span>internal award received</span></div>
+</div>
+
+## 04 · What I took away
+
+Big migrations are 10% SQL and 90% discipline. The dual-write shadow saved us twice — once from a silent JSON-encoding drift, once from a DST-triggered timestamp bug. If you remember one thing, remember: *trust the diff, not the demo.*

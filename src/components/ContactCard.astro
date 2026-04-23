@@ -1,0 +1,73 @@
+---
+interface Action {
+    kicker: string;
+    title: string;
+    sub: string;
+    cta: string;
+    kind: 'email' | 'link';
+    href?: string;
+}
+interface Props {
+    id?: string;
+    chapterNum: string;
+    title: string;
+    desc: string;
+    actions: Action[];
+    phoneNote: string;
+    emailUserB64: string;
+    emailDomainB64: string;
+}
+const { id, chapterNum, title, desc, actions, phoneNote, emailUserB64, emailDomainB64 } = Astro.props;
+---
+
+<section id={id} class="chapter">
+    <div class="container-xxl">
+        <div class="end-card d-flex flex-column gap-3">
+            <span class="chapter-num">{chapterNum}</span>
+            <h2 class="chapter-title">{title}</h2>
+            <p class="chapter-desc">{desc}</p>
+
+            <ul class="contact-grid">
+                {actions.map((action) => (
+                    <li>
+                        {action.kind === 'email' ? (
+                            <button
+                                class="contact-action"
+                                type="button"
+                                data-contact-reveal="email"
+                                data-user={emailUserB64}
+                                data-domain={emailDomainB64}
+                                aria-label="Reveal email address and open mail client"
+                            >
+                                <span class="contact-action-label">
+                                    <span class="contact-action-kicker">{action.kicker}</span>
+                                    <span class="contact-action-title">{action.title}</span>
+                                    <span class="contact-action-sub">{action.sub}</span>
+                                </span>
+                                <span class="contact-action-cta" aria-hidden="true">{action.cta}</span>
+                            </button>
+                        ) : (
+                            <a
+                                class="contact-action"
+                                href={action.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label={`${action.title} (opens in new tab)`}
+                            >
+                                <span class="contact-action-label">
+                                    <span class="contact-action-kicker">{action.kicker}</span>
+                                    <span class="contact-action-title">{action.title}</span>
+                                    <span class="contact-action-sub">{action.sub}</span>
+                                </span>
+                                <span class="contact-action-cta" aria-hidden="true">{action.cta}</span>
+                            </a>
+                        )}
+                    </li>
+                ))}
+            </ul>
+
+            <p class="contact-foot">{phoneNote}</p>
+            <div class="contact-toast" data-contact-toast role="status" aria-live="polite"></div>
+        </div>
+    </div>
+</section>

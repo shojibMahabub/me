@@ -1,0 +1,12 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props { site: CollectionEntry<'site'>['data']; }
+const { site } = Astro.props;
+---
+
+<footer class="site-footer">
+    <div class="container-xxl d-flex flex-wrap justify-content-between gap-3">
+        <span>{site.footer.left}</span>
+        <span>{site.footer.right}</span>
+    </div>
+</footer>

@@ -1,0 +1,77 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+
+const projects = (await getCollection('projects', (p) => !p.data.draft))
+    .sort((a, b) => a.data.order - b.data.order);
+
+const filters = [
+    { id: 'all', label: 'All' },
+    { id: 'banking', label: 'Banking & Finance' },
+    { id: 'cloud', label: 'Cloud & DevOps' },
+    { id: 'data', label: 'Data & Migration' },
+    { id: 'security', label: 'Security' },
+];
+---
+
+<BaseLayout
+    title="Projects"
+    description="Selected work: banking migrations, fintech platforms, cloud infrastructure, security hardening."
+    activeNav="Projects"
+>
+    <header class="page-head container-xxl">
+        <span class="eyebrow"><span class="eyebrow-dot"></span>Selected work</span>
+        <h1 class="page-title">Systems, migrations<br />and other stubborn machines.</h1>
+        <p class="page-sub">Six years of work, distilled into the handful of projects I'd want you to actually read about.</p>
+    </header>
+
+    <section class="container-xxl pb-5">
+        <div class="filter-bar" role="tablist" aria-label="Filter projects by category">
+            {filters.map((f, idx) => (
+                <button
+                    type="button"
+                    class:list={['filter-pill', idx === 0 && 'is-active']}
+                    data-filter={f.id}
+                    role="tab"
+                    aria-selected={idx === 0 ? 'true' : 'false'}
+                >{f.label}</button>
+            ))}
+        </div>
+
+        <div class="row g-4" data-projects-grid>
+            {projects.map((project) => (
+                <div
+                    class="col-md-6 col-lg-4"
+                    data-project-item
+                    data-categories={project.data.categories.join(',')}
+                >
+                    <ProjectCard project={project} />
+                </div>
+            ))}
+        </div>
+    </section>
+</BaseLayout>
+
+<script>
+    const pills = document.querySelectorAll<HTMLButtonElement>('.filter-pill');
+    const items = document.querySelectorAll<HTMLElement>('[data-project-item]');
+
+    pills.forEach((pill) => {
+        pill.addEventListener('click', () => {
+            const filter = pill.dataset.filter;
+            if (!filter) return;
+
+            pills.forEach((p) => {
+                p.classList.toggle('is-active', p === pill);
+                p.setAttribute('aria-selected', p === pill ? 'true' : 'false');
+            });
+
+            items.forEach((item) => {
+                const cats = (item.dataset.categories || '').split(',');
+                const show = filter === 'all' || cats.includes(filter);
+                item.classList.toggle('is-hidden', !show);
+            });
+        });
+    });
+</script>

@@ -1,0 +1,45 @@
+---
+interface Group { group: string; primary: string[]; secondary: string[] }
+interface Props {
+    id?: string;
+    chapterNum: string;
+    title: string;
+    desc: string;
+    groups: Group[];
+}
+const { id, chapterNum, title, desc, groups } = Astro.props;
+---
+
+<section id={id} class="chapter chapter-dark">
+    <div class="container-xxl">
+        <div class="chapter-head">
+            <span class="chapter-num">{chapterNum}</span>
+            <h2 class="chapter-title">{title}</h2>
+            <p class="chapter-desc">{desc}</p>
+        </div>
+
+        <div class="row g-4">
+            {groups.map((group) => (
+                <div class="col-md-6 col-lg-4">
+                    <div class="skill-group">
+                        <h3>{group.group}</h3>
+                        {group.primary.length > 0 && (
+                            <div class="chip-row primary">
+                                {group.primary.map((item) => (
+                                    <span class="chip chip-primary">{item}</span>
+                                ))}
+                            </div>
+                        )}
+                        {group.secondary.length > 0 && (
+                            <div class="chip-row secondary">
+                                {group.secondary.map((item) => (
+                                    <span class="chip chip-secondary">{item}</span>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>

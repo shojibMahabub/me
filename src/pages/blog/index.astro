@@ -1,0 +1,41 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const posts = (await getCollection('blog', (p) => !p.data.draft))
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+
+const formatDate = (d: Date) =>
+    d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+---
+
+<BaseLayout
+    title="Writing"
+    description="Field reports on banking systems, migrations, DevOps and security."
+    activeNav="Writing"
+>
+    <header class="page-head container-xxl">
+        <span class="eyebrow"><span class="eyebrow-dot"></span>Writing</span>
+        <h1 class="page-title">Notes from the trenches.</h1>
+        <p class="page-sub">Short, field-report style posts about what actually worked (and what didn't) while shipping banking and fintech backends.</p>
+    </header>
+
+    <section class="container-xxl pb-5">
+        <div class="posts-list">
+            {posts.map((post) => (
+                <a class="post-row" href={`/blog/${post.id}/`}>
+                    <div class="post-row-meta">
+                        <div>{post.data.category}</div>
+                        <div>{post.data.readTime}</div>
+                        <div>{formatDate(post.data.date)}</div>
+                    </div>
+                    <div>
+                        <h2>{post.data.title}</h2>
+                        <p>{post.data.excerpt}</p>
+                    </div>
+                    <span class="post-row-arrow">Read →</span>
+                </a>
+            ))}
+        </div>
+    </section>
+</BaseLayout>

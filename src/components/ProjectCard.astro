@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props {
+    project: CollectionEntry<'projects'>;
+    variant?: 'default' | 'lead';
+}
+const { project, variant = 'default' } = Astro.props;
+const data = project.data;
+const href = `/projects/${project.id}/`;
+---
+
+<a
+    class:list={['feat-card', variant === 'lead' && 'is-lead']}
+    data-categories={data.categories.join(',')}
+    href={href}
+>
+    <div class="card-top">
+        <span>{data.year}</span>
+        <span>{data.role}</span>
+    </div>
+    <h3>{data.title}</h3>
+    <p>{data.summary}</p>
+    <div class="card-tags">
+        {data.tags.slice(0, 4).map((tag) => <span class="card-tag">{tag}</span>)}
+    </div>
+    <div class="card-foot">
+        <span class="card-impact">{data.impact}</span>
+        <span class="card-go">Open case →</span>
+    </div>
+</a>

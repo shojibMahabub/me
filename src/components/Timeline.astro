@@ -1,0 +1,15 @@
+---
+interface Item { year: string; title: string; description: string; isNow: boolean }
+interface Props { items: Item[] }
+const { items } = Astro.props;
+---
+
+<ol class="timeline list-unstyled">
+    {items.map((item) => (
+        <li class:list={['timeline-item', item.isNow && 'is-now']}>
+            <div class="timeline-year">{item.year}</div>
+            <h3>{item.title}</h3>
+            <p>{item.description}</p>
+        </li>
+    ))}
+</ol>

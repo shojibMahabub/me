@@ -1,0 +1,55 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+    id?: string;
+    chapterNum: string;
+    title: string;
+    desc: string;
+    videos: CollectionEntry<'videos'>[];
+}
+const { id, chapterNum, title, desc, videos } = Astro.props;
+---
+
+<section id={id} class="chapter">
+    <div class="container-xxl">
+        <div class="chapter-head">
+            <span class="chapter-num">{chapterNum}</span>
+            <h2 class="chapter-title">{title}</h2>
+            <p class="chapter-desc">{desc}</p>
+        </div>
+
+        <div class="row g-4">
+            {videos.map((video) => (
+                <div class="col-md-6">
+                    <article class="reel-card">
+                        <div class="reel-poster">
+                            <div class="reel-poster-bg">
+                                <div class={`poster-pattern ${video.data.pattern}`}></div>
+                            </div>
+                            <button
+                                class="video-play"
+                                type="button"
+                                data-video-open={video.data.src}
+                                aria-label={`Play ${video.data.title}`}
+                            >
+                                <span class="video-play-icon" aria-hidden="true">▶</span>
+                                <span class="video-play-label">Click to play</span>
+                            </button>
+                        </div>
+                        <div class="reel-meta">
+                            <div class="reel-meta-top">
+                                <span>{video.data.duration}</span>
+                                {video.data.href && (
+                                    <a href={video.data.href} class="muted">Case study →</a>
+                                )}
+                            </div>
+                            <h3>{video.data.title}</h3>
+                            <p>{video.data.description}</p>
+                        </div>
+                    </article>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
