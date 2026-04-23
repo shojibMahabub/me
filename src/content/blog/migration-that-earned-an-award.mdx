@@ -3,34 +3,44 @@ title: "The migration that earned an award"
 excerpt: "Four months of moving a live financial ledger without losing a single paisa. A field report."
 date: 2026-04-12
 readTime: "6 min read"
-category: "Banking"
+category: "Engineering"
 ---
 
-I've done plenty of migrations. This one was different because a bank was watching.
+I’ve done plenty of migrations over the years, but this one was on a different level. It started with a single, deceptively simple sentence from a new client called Yes Bank: "If you can ship your code with Oracle, we’ll take this project." 
 
-## The setup
+To a bystander, that might sound like a minor configuration tweak. For us at Veefin, it was a massive technical mountain. Our entire system was built on MySQL 7, and we were being asked to move it to Oracle 21c. This wasn't just a "find and replace" job; the depth of that request was huge.
 
-Our supply chain finance platform ran on MySQL. Yes Bank India wanted to go live on it, but their policy required Oracle. We had one choice: move everything over — schemas, stored procedures, application code, background jobs, the ledger — while development on other banks kept going.
+You see, we had to process a massive amount of data for the bank at various cron timings throughout the day. Because of that complexity and the deep relationships in our data, we had avoided using the standard ORMs provided by Laravel. We relied on raw SQL and stored procedures to keep things performant. Everything we had written was perfectly friendly for MySQL, but Oracle has a completely different personality.
 
-## Where we started
+### The First Story: The "Translator" Library
 
-Weeks one and two were the humbling part. MySQL and Oracle disagree about small, important things: auto-increment keys vs sequences, JSON handling, timestamp precision, reserved words, case sensitivity. We spent days cataloguing every assumption our codebase made and wasn't aware of.
+The friction started early. We realized that simple things like the word `DATE`—which we used everywhere in MySQL—is a reserved keyword in Oracle. Then there were the differences in date formats, data types, and even how `GROUP BY` clauses behave. It was clear that we couldn't just flip a switch in the `.env` file and expect things to work.
 
-## Dual-writes and diffs
+Our team lead in Bangladesh was incredible during this period. At that time, he and our team were trusted over five or six other teams in India, and he pulled me in as part of the core unit to solve this.
 
-The play that saved us was building a dual-write shadow. For three weeks before the cut-over, every write hit both databases. Every night, a job walked 40+ critical tables, compared row counts and column-level checksums, and screamed at us in Slack if anything drifted.
+> **Our First Major Move**
+> We sat down and built a native PHP library specifically to modify our existing raw queries and make them Oracle-friendly on the fly. It was a massive team effort that allowed us to keep our core logic while satisfying the bank's requirements without rewriting thousands of lines of code.
 
-It drifted twice. Once from JSON serialization (MySQL kept insertion order, Oracle did not — a problem when a downstream parser cared). Once from a DST boundary in a timestamp column. Both would have been nightmares in production.
+### The Second Story: The Dusty PC in the Corner
 
-## The cut-over
+While the library was a great start, the code was only half the battle. We hit a wall with reproducibility. With six of us working on these complex data flows, "it works on my machine" was becoming a constant refrain. We needed a central place where everyone could test against the same data in real-time.
 
-A 6-hour maintenance window. Freeze writes, run a final diff, flip the config, warm up the workers, unfreeze. The rollback script was one command. We wrote it early and never used it.
+I noticed an unused PC sitting in a corner of our Bangladesh office, collecting dust. I realized that if we could get that machine online, we could solve our collaboration bottleneck.
 
-## What I actually learned
+> **The Centralized Hub**
+> With a few commands, I turned that forgotten hardware into a remote database server hosting both Oracle and MySQL. This meant our core team could work with the same data simultaneously. If someone found a bug or a data mismatch in an Oracle procedure, we could all see it and fix it in the library instantly.
 
-- A big migration is 90% discipline, 10% SQL.
-- The diff harness is the product. The migration is a side-effect.
-- Dual-write for longer than you want to. You'll find real bugs only by watching the two systems disagree for a while.
-- Write the rollback script first. It focuses the mind.
+### The Third Story: Ending the OCI8 Nightmare
+
+But even with a central database, we had a bigger scaling problem. We had a team of over 20 developers and QA testers who all needed to connect to this new setup. If you’ve ever tried to get the `php-oci8` extension and the Oracle Instant Client to install properly across twenty different machines, you know it’s a special kind of hell. 
+
+We were losing so much time. Developers were stuck in a loop of installation errors, environment variable mismatches, and broken library paths. We were supposed to be migrating a bank, but we were spending all our time troubleshooting local setups.
+
+> **The Infrastructure Breakthrough**
+> I spent time crafting a comprehensive Docker Compose file that handled the entire setup—the PHP environment, the OCI8 drivers, and all the necessary headers. Suddenly, what used to take days of troubleshooting for a new dev became a single command. It saved our 20+ developers and testers an incredible amount of time, finally letting the whole team focus on the actual migration.
+
+In the end, we did it. We thoroughly tested the full system, and it worked flawlessly. The project was a success, and the effort we put in—both in the logic we built and the infrastructure we stood up—landed me significant internal recognition. 
+
+Looking back, it wasn't just about moving data; it was about how we as a team simplified a complex problem so we could move faster than anyone expected. That’s how we earned the win.
 
 Full case study with architecture and code samples: [Yes Bank migration](/projects/yes-bank-migration/).
