@@ -5,12 +5,12 @@
 // contact reveal + copy.
 // =====================================================================
 
-import { Modal } from 'bootstrap';
+import { Modal, Offcanvas } from 'bootstrap';
 
 // Expose on window for debugging (dev only)
 declare global {
     interface Window {
-        bootstrap?: { Modal: typeof Modal };
+        bootstrap?: { Modal: typeof Modal; Offcanvas: typeof Offcanvas };
     }
 }
 
@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupStickyNav();
     setupRevealOnScroll();
     setupVideoModal();
+    setupOffcanvasNav();
     setupContactReveal();
 });
 
@@ -57,6 +58,20 @@ function setupRevealOnScroll() {
         { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
     );
     targets.forEach((t) => io.observe(t));
+}
+
+// ---------- Offcanvas nav ----------
+// Bootstrap's data-bs-toggle API needs the Offcanvas plugin to be imported
+// (without it, clicking the hamburger silently does nothing). We also
+// auto-dismiss the drawer when the user taps a nav link so the page content
+// isn't stuck behind the overlay when navigating to a hash target.
+function setupOffcanvasNav() {
+    const el = document.getElementById('siteOffcanvas');
+    if (!el) return;
+    const instance = Offcanvas.getOrCreateInstance(el);
+    el.querySelectorAll<HTMLAnchorElement>('a.nav-link').forEach((link) => {
+        link.addEventListener('click', () => instance.hide());
+    });
 }
 
 // ---------- Video modal ----------

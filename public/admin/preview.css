@@ -1,0 +1,331 @@
+/* =====================================================================
+   preview.css
+   Styles for the Decap CMS preview pane. We intentionally DON'T import
+   the real site.scss bundle — the preview runs inside Decap's sandboxed
+   iframe and we only need enough styling to make the editor's result
+   recognisably "on-brand". Tokens here mirror theme.scss.
+   ===================================================================== */
+
+:root {
+    --site-bg:        #f6f1e8;
+    --site-bg-soft:   #efe8db;
+    --site-ink:       #14130f;
+    --site-ink-2:     #2c2a24;
+    --site-muted:     #6b6458;
+    --site-muted-2:   #9a9182;
+    --site-line:      #d9d2c3;
+    --site-dark-bg:   #0f0e0b;
+    --site-dark-bg-2: #17150f;
+    --site-dark-ink:  #f5f0e3;
+    --site-dark-muted:#9a9282;
+    --site-dark-line: #2a2721;
+    --site-accent:    #d0462e;
+    --site-accent-2:  #e4a82c;
+    --site-radius:    0.875rem;
+    --ff-sans:        'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --ff-display:     'Space Grotesk', 'Inter', system-ui, sans-serif;
+    --ff-mono:        'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+body.cms-preview {
+    margin: 0;
+    padding: 0;
+    background: var(--site-bg);
+    color: var(--site-ink-2);
+    font-family: var(--ff-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+.cms-preview-shell {
+    padding: 2rem 1.75rem 3rem;
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+.cms-preview-shell.is-dark {
+    background: var(--site-dark-bg);
+    color: var(--site-dark-ink);
+}
+.cms-preview-shell.is-dark h1,
+.cms-preview-shell.is-dark h2,
+.cms-preview-shell.is-dark h3 { color: var(--site-dark-ink); }
+.cms-preview-shell.is-dark .cms-muted { color: var(--site-dark-muted); }
+
+.cms-preview-shell h1,
+.cms-preview-shell h2,
+.cms-preview-shell h3 {
+    font-family: var(--ff-display);
+    letter-spacing: -0.015em;
+    color: var(--site-ink);
+    margin: 0;
+}
+.cms-preview-shell h1 {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 600;
+    line-height: 1.1;
+}
+.cms-preview-shell h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+}
+.cms-preview-shell h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-top: 1.25rem;
+    margin-bottom: 0.4rem;
+}
+.cms-preview-shell p { margin: 0 0 0.9em; }
+.cms-preview-shell .cms-muted { color: var(--site-muted); }
+
+.cms-empty {
+    display: block;
+    margin: 2rem 0;
+    padding: 1rem 1.2rem;
+    border: 1px dashed var(--site-line);
+    border-radius: var(--site-radius);
+    color: var(--site-muted-2);
+    font-family: var(--ff-mono);
+    font-size: 0.85rem;
+}
+
+.cms-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--ff-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--site-muted);
+    margin-bottom: 0.75rem;
+}
+.cms-eyebrow::before {
+    content: "";
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--site-accent);
+    box-shadow: 0 0 0 3px rgba(208,70,46,0.15);
+}
+
+.cms-chapter-num {
+    display: inline-block;
+    font-family: var(--ff-mono);
+    font-size: 0.78rem;
+    color: var(--site-accent);
+    letter-spacing: 0.08em;
+    padding: 3px 9px;
+    border: 1px solid var(--site-accent);
+    border-radius: 999px;
+    margin-bottom: 0.6rem;
+}
+
+.cms-hero-title { font-size: clamp(2rem, 5vw, 3rem); }
+.cms-hero-title .accent { color: var(--site-accent); font-style: italic; }
+.cms-hero-sub { font-size: 1.05rem; color: var(--site-muted); max-width: 640px; margin-bottom: 1.25rem; }
+
+.cms-ctas {
+    display: flex; flex-wrap: wrap; gap: 0.5rem;
+    margin: 0.5rem 0 1.5rem;
+}
+.cms-cta {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 0.55rem 1.1rem;
+    font-family: var(--ff-mono);
+    font-size: 0.82rem;
+    border-radius: 999px;
+    border: 1px solid var(--site-ink);
+}
+.cms-cta.primary { background: var(--site-ink); color: var(--site-bg); }
+.cms-cta.ghost   { background: transparent; color: var(--site-ink); }
+
+.cms-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--site-line);
+    margin-top: 1.5rem;
+}
+.cms-stats .v {
+    display: block;
+    font-family: var(--ff-display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--site-ink);
+    letter-spacing: -0.02em;
+}
+.cms-stats .l { font-size: 0.82rem; color: var(--site-muted); }
+
+.cms-section {
+    padding: 1.25rem 0;
+    border-top: 1px solid var(--site-line);
+    margin-top: 1.5rem;
+}
+.cms-section:first-of-type { border-top: 0; margin-top: 0; }
+
+.cms-pill-row {
+    display: flex; flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0.25rem 0 0.75rem;
+}
+.cms-pill {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.82rem;
+    border-radius: 999px;
+    background: var(--site-bg-soft);
+    color: var(--site-ink-2);
+}
+.cms-pill.primary { background: var(--site-ink); color: var(--site-bg); }
+.cms-pill.mono {
+    font-family: var(--ff-mono);
+    font-size: 0.76rem;
+    background: transparent;
+    color: var(--site-muted);
+    border: 1px solid var(--site-line);
+}
+
+.cms-card {
+    padding: 1.25rem 1.3rem;
+    background: #fff;
+    border: 1px solid var(--site-line);
+    border-radius: var(--site-radius);
+    margin-bottom: 1rem;
+}
+.cms-card.dark { background: var(--site-dark-bg-2); color: var(--site-dark-ink); border-color: var(--site-dark-line); }
+.cms-card .meta {
+    display: flex; flex-wrap: wrap; gap: 0.75rem;
+    font-family: var(--ff-mono);
+    font-size: 0.72rem;
+    color: var(--site-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+}
+
+.cms-timeline { list-style: none; padding: 0; margin: 0; border-left: 1px solid var(--site-line); }
+.cms-timeline > li {
+    position: relative;
+    padding: 0.5rem 0 1rem 1.25rem;
+}
+.cms-timeline > li::before {
+    content: "";
+    position: absolute;
+    left: -6px; top: 0.9rem;
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    background: var(--site-bg);
+    border: 2px solid var(--site-muted);
+}
+.cms-timeline > li.is-now::before {
+    background: var(--site-accent);
+    border-color: var(--site-accent);
+    box-shadow: 0 0 0 4px rgba(208,70,46,0.15);
+}
+.cms-timeline .year {
+    font-family: var(--ff-mono);
+    font-size: 0.78rem;
+    color: var(--site-accent-2);
+    letter-spacing: 0.1em;
+}
+.cms-timeline h3 { font-size: 1.05rem; margin: 0.2rem 0 0.25rem; }
+
+.cms-poster {
+    aspect-ratio: 16 / 9;
+    border-radius: var(--site-radius);
+    margin: 0.5rem 0 1rem;
+    background:
+        radial-gradient(circle at 30% 30%, #e2533b 0%, transparent 50%),
+        linear-gradient(135deg, #2a1a14 0%, #0f0e0b 100%);
+}
+.cms-poster.poster-pattern-1 {
+    background:
+        radial-gradient(circle at 20% 30%, #ffb47a 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, #e2533b 0%, transparent 45%),
+        linear-gradient(135deg, #2a1a14 0%, #0f0e0b 100%);
+}
+.cms-poster.poster-pattern-2 {
+    background:
+        linear-gradient(120deg, rgba(228,168,44,0.8), transparent 60%),
+        radial-gradient(circle at 70% 30%, #d0462e 0%, transparent 50%),
+        linear-gradient(135deg, #1a1812 0%, #0f0e0b 100%);
+}
+.cms-poster.poster-pattern-3 {
+    background:
+        repeating-linear-gradient(45deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 14px),
+        radial-gradient(circle at 50% 50%, #3a261d 0%, #0f0e0b 70%);
+}
+.cms-poster.poster-pattern-4 {
+    background:
+        radial-gradient(circle at 30% 80%, #5b6bff 0%, transparent 40%),
+        radial-gradient(circle at 80% 20%, #e4a82c 0%, transparent 40%),
+        linear-gradient(135deg, #1b1a16 0%, #0f0e0b 100%);
+}
+
+.cms-end-card {
+    margin-top: 1.5rem;
+    padding: 1.75rem 1.5rem;
+    background: var(--site-ink);
+    color: var(--site-bg);
+    border-radius: var(--site-radius);
+}
+.cms-end-card h2 { color: var(--site-bg); }
+.cms-end-card .row {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 1rem;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--site-radius);
+    margin-top: 0.6rem;
+}
+.cms-end-card .kicker {
+    font-family: var(--ff-mono);
+    font-size: 0.72rem;
+    color: var(--site-accent-2);
+    letter-spacing: 0.1em;
+}
+.cms-end-card .title { font-family: var(--ff-display); font-weight: 600; }
+.cms-end-card .sub { color: var(--site-dark-muted); font-size: 0.88rem; }
+.cms-end-card .cta {
+    font-family: var(--ff-mono);
+    font-size: 0.78rem;
+    color: var(--site-accent-2);
+    white-space: nowrap;
+}
+
+.cms-body {
+    margin-top: 1rem;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--site-ink-2);
+}
+.cms-body h1, .cms-body h2, .cms-body h3 { margin-top: 1.75rem; }
+.cms-body a { color: var(--site-accent); }
+.cms-body ul, .cms-body ol { padding-left: 1.1rem; }
+.cms-body pre, .cms-body code {
+    font-family: var(--ff-mono);
+    background: var(--site-dark-bg);
+    color: var(--site-dark-ink);
+    border-radius: 6px;
+}
+.cms-body pre { padding: 1rem 1.1rem; font-size: 0.85rem; overflow-x: auto; }
+.cms-body code { padding: 1px 5px; font-size: 0.85em; }
+.cms-body blockquote {
+    margin: 1.25rem 0;
+    padding: 0.6rem 0 0.6rem 1.1rem;
+    border-left: 3px solid var(--site-accent);
+    font-style: italic;
+    color: var(--site-ink);
+}
+
+/* ---- Admin page chrome (the /admin/ host page only) ---- */
+/* Decap renders a full-screen UI; we set a neutral bg so the initial
+   load isn't a white flash. The CMS itself then takes over. */
+body:not(.cms-preview) {
+    background: #f6f1e8;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    margin: 0;
+}

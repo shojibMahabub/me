@@ -1004,3 +1004,140 @@ img, svg, video { display: block; max-width: 100%; }
     *, *::before, *::after { animation: none !important; transition: none !important; }
     .reveal { opacity: 1; transform: none; }
 }
+
+// =====================================================================
+// Responsive refinements
+// Bootstrap breakpoints we target:
+//   sm  576  · md  768  · lg  992  · xl 1200  · xxl 1400
+// Rules below only *tighten* layout at the given width — the base rules
+// already cover the desktop/xxl case correctly.
+// =====================================================================
+
+// ---------- Tablet (≤ lg) ----------
+@media (max-width: 991.98px) {
+    // Offcanvas nav drawer: stay narrow on tablet so content stays visible
+    // behind the scrim (Bootstrap default 400px bleeds across the viewport).
+    .site-nav .offcanvas-end { width: min(86%, 360px); }
+    .site-nav .offcanvas-body .nav-link {
+        padding: 0.65rem 0.25rem;
+        border-bottom: 1px solid var(--site-line);
+    }
+    .site-nav .offcanvas-body .nav-link:last-child { border-bottom: 0; }
+    .site-nav .offcanvas-body .nav-cta {
+        display: inline-block;
+        margin-top: 0.75rem;
+        border-bottom: 0;
+    }
+
+    // Featured lead card can drop min-height on tablet to avoid big empty zones
+    .featured-grid .feat-card.is-lead { min-height: 220px; }
+
+    // Case study body shouldn't grow beyond readable width even when sidebar-less
+    .case { padding: 2.5rem 0 5rem; }
+    .post-article { padding: 2.5rem 0 5rem; }
+}
+
+// ---------- Mobile (≤ sm) ----------
+@media (max-width: 575.98px) {
+    // Tighter container gutters so content doesn't hug the edge
+    .container-xxl { padding-left: 1.1rem; padding-right: 1.1rem; }
+
+    // Hero trim
+    .hero { padding: clamp(40px, 14vw, 80px) 0 clamp(48px, 14vw, 96px); }
+    .hero-copy .btn-lg {
+        width: 100%;
+        padding: 0.85rem 1.25rem;
+    }
+    .hero-sub { margin-bottom: 2rem; }
+    .hero-stats {
+        margin-top: 2.75rem;
+        padding-top: 1.75rem;
+        gap: 1rem 1.25rem;
+    }
+    .hero-stats strong { font-size: 1.35rem; }
+
+    // Chapter rhythm
+    .chapter { padding: clamp(56px, 14vw, 88px) 0; }
+    .chapter-head { margin-bottom: 2.25rem; }
+
+    // Page heads (about / projects / blog index)
+    .page-head { padding: clamp(40px, 10vw, 72px) 0 1.25rem; }
+
+    // Card padding: desktop 2rem → mobile 1.25rem
+    .feat-card, .proj-card { padding: 1.5rem 1.25rem; min-height: 0; }
+    .about-card { padding: 1.5rem 1.25rem; }
+    .post-card { padding: 1.4rem 1.2rem; }
+    .skill-group { padding: 1.4rem 1.2rem; }
+
+    // End (contact) card: stretch to container, drop huge padding + decoration
+    .end-card { padding: 1.75rem 1.25rem; border-radius: calc(var(--site-radius) + 2px); }
+    .end-card::before {
+        top: -40px; right: -40px;
+        width: 170px; height: 170px;
+        opacity: 0.35;
+    }
+    .end-card .chapter-title { font-size: 1.85rem; }
+
+    // Contact action rows stack label above the CTA so nothing overflows
+    .contact-action {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.6rem;
+        padding: 1.1rem 1.15rem;
+    }
+    .contact-action-label { column-gap: 0.85rem; }
+    .contact-action-cta {
+        align-self: flex-start;
+        white-space: normal;
+    }
+    // Hover translateX would shift the card under the scrim — disable on touch
+    .contact-action:hover { transform: none; }
+
+    // Case study / blog article
+    .case { padding: 2rem 0 4rem; }
+    .case-head { margin-bottom: 2rem; }
+    .case-meta { padding: 1.25rem 0; gap: 1rem; }
+    .case-section p, .neat-list, .code-block { font-size: 0.98rem; }
+    .post-article { padding: 2rem 0 4rem; }
+    .post-head { margin-bottom: 2rem; }
+    .post-body { font-size: 1rem; line-height: 1.7; }
+
+    // Timeline markers fit the narrower gutter
+    .timeline { padding-left: 1.35rem; gap: 1.25rem; }
+    .timeline::before { left: 6px; }
+    .timeline-item { padding: 0.85rem 0 0.85rem 0.85rem; }
+    .timeline-item::before {
+        left: -1.35rem; top: 1.25rem;
+        width: 13px; height: 13px;
+    }
+    .timeline-item h3 { font-size: 1.2rem; }
+
+    // Filter pills on the projects index don't need to scroll-snap;
+    // just make sure wrapping looks deliberate
+    .filter-bar { gap: 0.4rem; margin-bottom: 1.75rem; }
+    .filter-pill { padding: 0.4rem 0.85rem; font-size: 0.78rem; }
+
+    // Nav brand: shrink the badge so "mark + name" fits next to the hamburger
+    .site-nav .navbar-brand { gap: 8px; font-size: 1rem; }
+    .site-nav .navbar-brand-mark { font-size: 0.72rem; padding: 3px 6px; }
+
+    // Modal video: respect safe padding
+    .video-modal .modal-dialog { margin: 1rem; }
+    .video-modal .modal-close-floating { top: -2.75rem; }
+}
+
+// ---------- Narrow mobile (≤ 380px) ----------
+@media (max-width: 380px) {
+    .hero-stats { grid-template-columns: 1fr 1fr; }
+    .chapter-title { font-size: 1.8rem; }
+    .hero-title { font-size: 2.1rem; }
+}
+
+// ---------- Touch devices: drop the translate-on-hover that sticks after tap ----------
+@media (hover: none) {
+    .feat-card:hover, .proj-card:hover, .post-card:hover, .reel-card:hover {
+        transform: none;
+        box-shadow: none;
+    }
+    .post-row:hover { padding-left: 0; }
+}

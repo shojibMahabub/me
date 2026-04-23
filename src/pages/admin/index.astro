@@ -1,0 +1,41 @@
+---
+// Decap CMS admin entry point.
+//
+// Why this is an Astro page (not just public/admin/index.html):
+//   Astro's dev server serves everything under public/ as-is, but it does NOT
+//   resolve directory indexes. So public/admin/index.html is reachable in dev
+//   at /admin/index.html but NOT at /admin/ (which 404s). Making this a real
+//   Astro route fixes that asymmetry between dev and prod.
+//
+// Decap still loads its config from /admin/config.yml, which is served
+// statically from public/admin/config.yml.
+export const prerender = true;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Content manager · Mahabub Elahi</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="cms-config-url" type="text/yaml" href="/admin/config.yml" />
+    <link rel="stylesheet" href="/admin/preview.css" />
+</head>
+<body>
+    <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script is:inline src="https://unpkg.com/decap-cms@^3.3.0/dist/decap-cms.js"></script>
+    <script is:inline src="/admin/preview.js"></script>
+    <script is:inline>
+        if (window.netlifyIdentity) {
+            window.netlifyIdentity.on('init', (user) => {
+                if (!user) {
+                    window.netlifyIdentity.on('login', () => {
+                        document.location.href = '/admin/';
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>

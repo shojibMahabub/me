@@ -7,6 +7,8 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
+    "cms": "decap-server",
+    "dev:cms": "concurrently -n astro,cms -c cyan,magenta \"npm:dev\" \"npm:cms\"",
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro"
@@ -23,6 +25,8 @@
   },
   "devDependencies": {
     "@popperjs/core": "^2.11.8",
-    "@types/bootstrap": "^5.2.10"
+    "@types/bootstrap": "^5.2.10",
+    "concurrently": "^9.2.1",
+    "decap-server": "^3.7.0"
   }
 }

@@ -34,7 +34,10 @@ site/
   │   ├── layouts/             # Reusable page wrappers
   │   └── styles/              # Custom SCSS (Bootstrap overrides)
   ├── public/
-  │   └── admin/               # Decap CMS configuration and UI
+  │   └── admin/
+  │       └── config.yml       # Decap CMS schema (served at /admin/config.yml)
+  ├── src/pages/admin/
+  │   └── index.astro          # Decap CMS shell (served at /admin/)
   ├── astro.config.mjs         # SSG & Integration settings
   └── netlify.toml             # CI/CD and Header configurations
 ```
@@ -57,11 +60,25 @@ npm run dev
 ```
 Your site will be live at `http://localhost:4321`.
 
-### 2. Configure the CMS
-To edit content locally via the CMS:
-1. Run `npx decap-server` in a separate terminal.
-2. Visit `http://localhost:4321/admin/`.
-3. Set `local_backend: true` in `public/admin/config.yml`.
+### 2. Edit content locally (CMS)
+The admin UI lives at `/admin/` and is powered by Decap CMS. It needs a tiny
+local proxy (`decap-server`, port **8081**) to read/write files in your repo
+instead of going through Netlify + GitHub.
+
+One-shot (runs Astro and the CMS proxy together):
+```bash
+npm run dev:cms
+```
+
+Or in two terminals:
+```bash
+npm run dev   # Astro on :4321
+npm run cms   # decap-server on :8081
+```
+Then open **http://localhost:4321/admin/**. Publishing writes directly to
+`src/content/...` on disk. `local_backend: true` is already set in
+`public/admin/config.yml` — Decap only activates it on `localhost`, so the
+Netlify deploy continues to use `git-gateway`.
 
 ### 3. Build for Production
 ```bash
